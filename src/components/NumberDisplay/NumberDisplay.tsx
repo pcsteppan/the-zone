@@ -7,7 +7,10 @@ interface NumberDisplayProps {
 }
 
 function NumberDisplay({displayNumber}: NumberDisplayProps) {
-  const displayString = displayNumber.toString().padStart(3, "0");
+  let displayString = displayNumber.toString().padStart(3, "0");
+  if(displayNumber < 0){
+    displayString = "-" + (displayNumber*-1).toString().padStart(2, "0");
+  }
   return <div className="NumberDisplay">{displayString}</div>
 }
 

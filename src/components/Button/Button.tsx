@@ -7,9 +7,11 @@ interface ButtonProps {
   col: number;
   value: CellValue;
   state: CellState;
+  onClickHandler(rowParam: number, colParam: number) : (...args: any) => void;
+  onContextMenuHandler(rowParam: number, colParam: number) : (...args: any) => void;
 }
 
-function Button({row, col, value, state}: ButtonProps) {
+function Button({row, col, value, state, onClickHandler, onContextMenuHandler}: ButtonProps) {
   const renderContent = (): React.ReactNode => {
     switch(state) {
       case CellState.discovered:
@@ -27,7 +29,9 @@ function Button({row, col, value, state}: ButtonProps) {
   }
 
   return (
-    <div className={`Button ${state===CellState.discovered ? "discovered" : "undiscovered"}`}>
+    <div className={`Button ${state===CellState.discovered ? "discovered" : "undiscovered"}`}
+      onClick={onClickHandler(row, col)}
+      onContextMenu={onContextMenuHandler(row, col)}>
       {renderContent()}
     </div>
   )
