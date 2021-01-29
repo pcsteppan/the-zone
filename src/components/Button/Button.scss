@@ -1,0 +1,56 @@
+@import "../../styles/index.scss";
+
+.Button {
+  @include borders($border-light, $border-dark);
+  @include buttons;
+  height: 30px;
+  width: 30px;
+  display: table;
+
+  &.discovered {
+    background-color: #c2c2c2;
+    border-width: 1px;
+    border-color: $border-dark;
+  }
+
+  span {
+    // margin: 0 auto;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    font-size: 16px;
+    width: 100%;
+
+    &.one {
+      color: blue;
+    }
+
+    &.two {
+      color: green;
+    }
+
+    &.three {
+      color: red;
+    }
+
+    &.four {
+      color: purple;
+    }
+
+    &.five {
+      color: maroon;
+    }
+
+    &.six {
+      color: turquoise;
+    }
+
+    &.seven {
+      color: black;
+    }
+
+    &.eight {
+      color: gray;
+    }
+  }
+}

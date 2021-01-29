@@ -1,0 +1,40 @@
+@import '../../styles/index.scss';
+
+$font-family: Helvetica;
+$font-size: 1em;
+
+.App{
+  background: #c2c2c2;
+  padding: 16px;
+  @include borders($border-light, $border-dark);
+}
+
+.Header {
+  background: #c0c0c0;
+  padding: 10px 12px;
+  @include borders($border-dark, $border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Body {
+  margin-top: 16px;
+  @include borders($border-dark, $border-light);
+  display: grid;
+  grid-template-rows: repeat(9, 1fr);
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.Face{
+  @include borders($border-light, $border-dark);
+  @include buttons;
+  background: #c2c2c2;
+  width: 52px;
+  height: 52px;
+  font-size: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
