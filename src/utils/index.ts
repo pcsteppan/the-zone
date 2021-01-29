@@ -1,8 +1,8 @@
 import { elementRoles } from 'aria-query';
 import {MAX_COLS, MAX_ROWS, BOMB_COUNT} from "../constants";
-import {CellValue, CellState, Cell} from "../types";
+import {CellValue, CellState, Cell, Index2D} from "../types";
 
-export const generateCells = () : Cell[][] => {
+export const generateCells = (notBombIndex? : Index2D) : Cell[][] => {
   let cells = new Array(MAX_ROWS).fill(null).map(_ => {
     return new Array(MAX_COLS).fill(null).map((_, i) => {
       return {
@@ -17,7 +17,7 @@ export const generateCells = () : Cell[][] => {
   while(bombCount > 0){
     const rowIndex = Math.floor(Math.random()*MAX_ROWS);
     const colIndex = Math.floor(Math.random()*MAX_COLS);
-    if(cells[rowIndex][colIndex].value !== CellValue.bomb){
+    if(cells[rowIndex][colIndex].value !== CellValue.bomb || (notBombIndex && [rowIndex, colIndex] !== notBombIndex)){
       cells[rowIndex][colIndex].value = CellValue.bomb;
       bombCount--;
     }

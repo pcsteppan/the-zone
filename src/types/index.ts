@@ -25,3 +25,5 @@ export enum Face {
 }
 
 export type Cell = { value: CellValue, state: CellState }
+
+export type Index2D = [ row: number, col: number ]

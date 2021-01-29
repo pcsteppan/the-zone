@@ -52,6 +52,7 @@ function App() {
 
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
     if(!live) {
+      setCells(generateCells([rowParam, colParam]));
       setLive(true);
     }
 
