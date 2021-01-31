@@ -4,7 +4,7 @@ $font-family: Helvetica;
 $font-size: 1em;
 
 .App{
-  background: #c2c2c2;
+  background: $bg-tile repeat;
   padding: 16px;
   @include borders($border-light, $border-dark);
   box-shadow:  20px 20px 35px #0f0f0f,
@@ -12,7 +12,7 @@ $font-size: 1em;
 }
 
 .Header {
-  background: #c0c0c0;
+  background: $bg-tile repeat;
   padding: 10px 12px;
   @include borders($border-dark, $border-light);
   display: flex;
@@ -31,7 +31,7 @@ $font-size: 1em;
 .Face{
   @include borders($border-light, $border-dark);
   @include buttons;
-  background: #c2c2c2;
+  background: $bg-tile repeat;
   width: 52px;
   height: 52px;
   font-size: 35px;

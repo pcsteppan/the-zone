@@ -8,13 +8,15 @@
   display: table;
 
   &.discovered {
-    background-color: #c2c2c2;
+    background-color: $border-dark;
     border-width: 1px;
-    border-color: $border-dark;
+    border-style: dotted;
+    border-color: $border-light;
   }
 
   span {
     // margin: 0 auto;
+    font-style: bold;
     text-align: center;
     vertical-align: middle;
     display: table-cell;
@@ -22,23 +24,23 @@
     width: 100%;
 
     &.one {
-      color: blue;
+      color: lightblue;
     }
 
     &.two {
-      color: green;
+      color: lightgreen;
     }
 
     &.three {
-      color: red;
+      color: lightcoral;
     }
 
     &.four {
-      color: purple;
+      color: lavender;
     }
 
     &.five {
-      color: maroon;
+      color: lightsalmon;
     }
 
     &.six {
@@ -46,11 +48,11 @@
     }
 
     &.seven {
-      color: black;
+      color: white;
     }
 
     &.eight {
-      color: gray;
+      color: lightyellow;
     }
   }
 }

@@ -24,6 +24,23 @@ export enum Face {
   won = '😎'
 }
 
+export enum ActionType {
+  INIT,
+  FIRST_CLICK,
+  BFS_REVEAL,
+  DISCOVER,
+  FLAG,
+  UNFLAG
+}
+
+export type Action =
+  | { type: ActionType.INIT; }
+  | { type: ActionType.FIRST_CLICK; i2D: Index2D }
+  | { type: ActionType.BFS_REVEAL; i2D: Index2D }
+  | { type: ActionType.DISCOVER; i2D: Index2D }
+  | { type: ActionType.FLAG; i2D: Index2D }
+  | { type: ActionType.UNFLAG; i2D: Index2D  }
+
 export type Cell = { value: CellValue, state: CellState }
 
 export type Index2D = [ row: number, col: number ]

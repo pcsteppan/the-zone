@@ -1,16 +1,42 @@
-import React, {useEffect, useState} from 'react';
-import {Cell, CellValue, CellState} from "../../types"
+import React, {useEffect, useState, useReducer} from 'react';
+import {Cell, CellValue, CellState, Index2D, Action, ActionType} from "../../types"
 
 import Button from '../Button/Button';
 import NumberDisplay from '../NumberDisplay/NumberDisplay';
-import { generateCells } from '../../utils';
+import { generateCells, generateNeighborIndices, bfsDiscover } from '../../utils';
 import {Face} from '../../types'
 
 import './App.scss';
-import { BOMB_COUNT } from '../../constants';
+import { BOMB_COUNT, MAX_COLS } from '../../constants';
+
+function reducer(state: Cell[][], action: Action): Cell[][] {
+  const newState = action.type === ActionType.DISCOVER ? CellState.discovered :
+                   action.type === ActionType.FLAG ? CellState.flagged :
+                   action.type === ActionType.UNFLAG ? CellState.undiscovered : CellState.undiscovered;
+
+  switch(action.type){
+    case ActionType.INIT:
+      return generateCells();
+    case ActionType.FIRST_CLICK:
+      console.log("first click")
+      return generateCells(action.i2D);
+    case ActionType.BFS_REVEAL:
+      console.log("bfs")
+      return bfsDiscover(state, action.i2D);
+    case ActionType.DISCOVER:
+    case ActionType.FLAG:
+    case ActionType.UNFLAG:
+      console.log("discover/f/u");
+      return state.map((row, rowIndex) => {
+        return row.map((currCell, colIndex) => {
+          return (action.i2D[0] === rowIndex && action.i2D[1] === colIndex) ? {...currCell, state: newState} : currCell;
+        })
+      })
+  }
+}
 
 function App() {
-  const [cells, setCells] = useState<Cell[][]>(generateCells());
+  const [cells, cellDispatch] = useReducer(reducer, generateCells());
   const [face , setFace ] = useState<Face>    (Face.glad);
   const [time , setTime ] = useState<number>  (0);
   const [bombCount, setBombCount] = useState<number> (BOMB_COUNT);
@@ -40,29 +66,36 @@ function App() {
     }
   }, [live, time])
 
-  const setCellInCells = (rowParam: number, colParam: number, newCell: Cell) => {
-    setCells((cells) => {
-      return cells.map((row, rowIndex) => {
-        return row.map((currCell, colIndex) => {
-          return (rowParam === rowIndex && colParam === colIndex) ? newCell : currCell;
-        })
-      })
-    })
+  const lose = () => {
+    setLive(false);
+    setFace(Face.lost);
+    return;
   }
 
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
     if(!live) {
-      setCells(generateCells([rowParam, colParam]));
+      cellDispatch({type: ActionType.FIRST_CLICK, i2D: [rowParam, colParam]});
       setLive(true);
-    }
+    } else {
 
-    setCells((cells) => {
-      return cells.map((row, rowIndex) => {
-        return row.map((cell, colIndex) => {
-          return (rowParam === rowIndex && colParam === colIndex) ? {...cell, state: CellState.discovered} : cell;
-        })
-      })
-    })
+    const cell = cells[rowParam][colParam];
+
+    switch(cell.state){
+      case CellState.flagged:
+        return;
+      case CellState.discovered:
+        return;
+      case CellState.undiscovered:
+        if(cell.value === CellValue.none)
+          cellDispatch({type: ActionType.BFS_REVEAL, i2D: [rowParam, colParam]})
+        else {
+          cellDispatch({type: ActionType.DISCOVER, i2D: [rowParam, colParam]})
+          if (cell.value === CellValue.bomb)
+            lose();
+        }
+        return;
+      }
+    }
   }
 
   const handleCellContext = (rowParam: number, colParam: number) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
@@ -76,10 +109,10 @@ function App() {
       case CellState.discovered:
         return;
       case CellState.undiscovered:
-        setCellInCells(rowParam, colParam, {...cells[rowParam][colParam], state: CellState.flagged});
+        cellDispatch({type: ActionType.FLAG, i2D: [rowParam, colParam]})
         break;
       case CellState.flagged:
-        setCellInCells(rowParam, colParam, {...cells[rowParam][colParam], state: CellState.undiscovered});
+        cellDispatch({type: ActionType.UNFLAG, i2D: [rowParam, colParam]})
         bombCountChange = 1;
         break;
     }
@@ -91,21 +124,8 @@ function App() {
     if(!live) {
       setLive(true);
       setTime(0);
-      setCells(generateCells());
+      cellDispatch({type: ActionType.INIT});
     }
-
-    // setFace((face) => {
-    //   switch(face){
-    //     case(Face.glad):
-    //       return Face.glad;
-    //     case(Face.lost):
-    //       return Face.glad;
-    //     case(Face.won):
-    //       return Face.glad;
-    //     default:
-    //       return Face.glad;
-    //   }
-    // })
   }
 
   const renderCells = (): React.ReactNode => {
