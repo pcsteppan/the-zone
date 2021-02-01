@@ -1,3 +1,10 @@
+export enum GamePhase {
+  apriori,
+  playing,
+  won,
+  lost,
+}
+
 export enum CellValue {
   none  ,
   one   ,
@@ -30,10 +37,12 @@ export enum ActionType {
   BFS_REVEAL,
   DISCOVER,
   FLAG,
-  UNFLAG
+  UNFLAG,
+  STATUS_CLICK
 }
 
 export type Action =
+  | { type: ActionType.STATUS_CLICK; }
   | { type: ActionType.INIT; }
   | { type: ActionType.FIRST_CLICK; i2D: Index2D }
   | { type: ActionType.BFS_REVEAL; i2D: Index2D }

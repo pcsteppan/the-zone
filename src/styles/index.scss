@@ -1,6 +1,25 @@
 $border-light: #739e5a;
 $border-dark: #376d68;
+$border-flag: #c15d45;
 $bg-tile: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACZJREFUCJljNM/N+G9j+InhyHk+BhvDTwxMyJwj5/kYmJA5WFUAAFXwGHK6JUv8AAAAAElFTkSuQmCC);
+$bg-flag: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACVJREFUCJljNM/N+N/14S5DmYAyQ9eHuwxMyJwyAWUGJmQOVhUAlkMZaioPf1sAAAAASUVORK5CYII=);
+
+$lighten-factor: 15%;
+$darken-factor: 6%;
+
+$blue:      #00B4FF;
+$orange:    #B28730;
+$red:       #c15d45;
+$gray:      #aaa;
+
+@mixin gamePhaseBackgroundAndBorders($core) {
+  $core-light: lighten(desaturate($core, $lighten-factor), $lighten-factor);
+  $core-dark: darken(desaturate($core, $darken-factor), $darken-factor);
+  background-color: $core;
+  border-width: 4px;
+  border-style: solid;
+  border-color: $core-light $core-dark $core-dark $core-light;
+}
 
 @mixin borders($left-top, $right-bottom) {
   border-width: 4px;

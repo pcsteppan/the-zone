@@ -3,24 +3,40 @@
 .Button {
   @include borders($border-light, $border-dark);
   @include buttons;
-  height: 30px;
-  width: 30px;
-  display: table;
+  background: $bg-tile repeat;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.discovered {
     background-color: $border-dark;
     border-width: 1px;
     border-style: dotted;
     border-color: $border-light;
+
+    &.bomb {
+      background: $bg-flag repeat;
+    }
+  }
+
+  &.flagged {
+    @include borders($border-flag, $border-dark);
+    background: $bg-flag repeat;
+  }
+
+  img {
+    // removes unintentional whitespace
+    display: table-cell;
   }
 
   span {
-    // margin: 0 auto;
     font-style: bold;
     text-align: center;
     vertical-align: middle;
     display: table-cell;
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
 
     &.one {

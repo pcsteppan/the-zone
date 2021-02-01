@@ -1,109 +1,97 @@
 import React, {useEffect, useState, useReducer} from 'react';
-import {Cell, CellValue, CellState, Index2D, Action, ActionType} from "../../types"
+import {Cell, CellValue, CellState, Action, ActionType, GamePhase} from "../../types"
 
 import Button from '../Button/Button';
 import NumberDisplay from '../NumberDisplay/NumberDisplay';
-import { generateCells, generateNeighborIndices, bfsDiscover } from '../../utils';
-import {Face} from '../../types'
+import { generateCells, bfsDiscover, getGamePhaseFromCells } from '../../utils';
 
 import './App.scss';
-import { BOMB_COUNT, MAX_COLS } from '../../constants';
+import { BOMB_COUNT } from '../../constants';
 
-function reducer(state: Cell[][], action: Action): Cell[][] {
-  const newState = action.type === ActionType.DISCOVER ? CellState.discovered :
+function reducer(state: {cells: Cell[][], gamePhase: GamePhase}, action: Action): {cells: Cell[][], gamePhase: GamePhase} {
+  const newCellState = action.type === ActionType.DISCOVER ? CellState.discovered :
                    action.type === ActionType.FLAG ? CellState.flagged :
                    action.type === ActionType.UNFLAG ? CellState.undiscovered : CellState.undiscovered;
 
+  let newState = {
+    cells: state.cells,
+    gamePhase: state.gamePhase
+  };
+
   switch(action.type){
+    case ActionType.STATUS_CLICK:
+      return {
+        cells: (state.gamePhase === GamePhase.playing) ? state.cells : generateCells(),
+        gamePhase: (state.gamePhase === GamePhase.won || state.gamePhase === GamePhase.lost) ? GamePhase.apriori : GamePhase.playing
+      }
     case ActionType.INIT:
-      return generateCells();
+      return {
+        cells: generateCells(),
+        gamePhase: GamePhase.apriori
+      };
     case ActionType.FIRST_CLICK:
-      console.log("first click")
-      return generateCells(action.i2D);
+      newState.cells = generateCells(action.i2D);
+      break;
     case ActionType.BFS_REVEAL:
-      console.log("bfs")
-      return bfsDiscover(state, action.i2D);
+      newState.cells = bfsDiscover(state.cells, action.i2D);
+      break;
     case ActionType.DISCOVER:
     case ActionType.FLAG:
     case ActionType.UNFLAG:
-      console.log("discover/f/u");
-      return state.map((row, rowIndex) => {
+      newState.cells = state.cells.map((row, rowIndex) => {
         return row.map((currCell, colIndex) => {
-          return (action.i2D[0] === rowIndex && action.i2D[1] === colIndex) ? {...currCell, state: newState} : currCell;
+          return (action.i2D[0] === rowIndex && action.i2D[1] === colIndex) ? {...currCell, state: newCellState} : currCell;
         })
       })
+      break;
   }
+
+  newState.gamePhase = getGamePhaseFromCells(newState.cells);
+
+  return newState;
 }
 
 function App() {
-  const [cells, cellDispatch] = useReducer(reducer, generateCells());
-  const [face , setFace ] = useState<Face>    (Face.glad);
+  const [state, cellDispatch] = useReducer(reducer, {cells: generateCells(), gamePhase: GamePhase.apriori});
   const [time , setTime ] = useState<number>  (0);
-  const [bombCount, setBombCount] = useState<number> (BOMB_COUNT);
-  const [live , setLive ] = useState<boolean> (false);
 
   useEffect(() => {
-    const handleMousedown = () => {
-      setFace(Face.hesitant);
-    }
-
-    const handleMouseup = () => {
-      setFace(Face.glad);
-    }
-
-    window.addEventListener("mousedown", handleMousedown);
-    window.addEventListener("mouseup", handleMouseup);
-  }, [])
-
-  useEffect(() => {
-    if (live) {
+    if (state.gamePhase === GamePhase.playing) {
       const interval = setInterval(() => {
         setTime(Math.min(time + 1, 999));
       }, 1000);
       return () => clearInterval(interval);
-    } else {
+    } else if (state.gamePhase === GamePhase.apriori) {
       setTime(0);
     }
-  }, [live, time])
-
-  const lose = () => {
-    setLive(false);
-    setFace(Face.lost);
-    return;
-  }
+  }, [state.gamePhase, time])
 
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
-    if(!live) {
+    if(state.gamePhase !== GamePhase.playing) {
       cellDispatch({type: ActionType.FIRST_CLICK, i2D: [rowParam, colParam]});
-      setLive(true);
     } else {
+      const cell = state.cells[rowParam][colParam];
 
-    const cell = cells[rowParam][colParam];
-
-    switch(cell.state){
-      case CellState.flagged:
-        return;
-      case CellState.discovered:
-        return;
-      case CellState.undiscovered:
-        if(cell.value === CellValue.none)
-          cellDispatch({type: ActionType.BFS_REVEAL, i2D: [rowParam, colParam]})
-        else {
-          cellDispatch({type: ActionType.DISCOVER, i2D: [rowParam, colParam]})
-          if (cell.value === CellValue.bomb)
-            lose();
-        }
-        return;
+      switch(cell.state){
+        case CellState.flagged:
+          return;
+        case CellState.discovered:
+          return;
+        case CellState.undiscovered:
+          if(cell.value === CellValue.none)
+            cellDispatch({type: ActionType.BFS_REVEAL, i2D: [rowParam, colParam]})
+          else {
+            cellDispatch({type: ActionType.DISCOVER, i2D: [rowParam, colParam]})
+          }
+          return;
       }
     }
   }
 
   const handleCellContext = (rowParam: number, colParam: number) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.preventDefault();
-    if(!live) return;
-    const currentCell = cells[rowParam][colParam];
-
-    let bombCountChange = -1;
+    if(state.gamePhase !== GamePhase.playing) return;
+    const currentCell = state.cells[rowParam][colParam];
 
     switch(currentCell.state){
       case CellState.discovered:
@@ -113,23 +101,25 @@ function App() {
         break;
       case CellState.flagged:
         cellDispatch({type: ActionType.UNFLAG, i2D: [rowParam, colParam]})
-        bombCountChange = 1;
         break;
     }
-    setBombCount((bombCount) => bombCount+bombCountChange);
     return;
   }
 
-  const handleFaceClick = () : void => {
-    if(!live) {
-      setLive(true);
-      setTime(0);
-      cellDispatch({type: ActionType.INIT});
-    }
+  const handleStatusClick = () : void => {
+    cellDispatch({type: ActionType.STATUS_CLICK});
+  }
+
+  const bombCount = () => {
+    return BOMB_COUNT - state.cells.reduce((acc, curr) => {
+      return acc + curr.reduce((acc, curr) => {
+        return acc + ((curr.state === CellState.flagged) ? 1 : 0);
+      }, 0)
+    }, 0)
   }
 
   const renderCells = (): React.ReactNode => {
-    return cells.map((row, rowIndex) => {
+    return state.cells.map((row, rowIndex) => {
       return row.map((cell, colIndex) => {
         return <Button
           key={`${rowIndex}-${colIndex}`}
@@ -147,8 +137,9 @@ function App() {
   return (
     <div className="App">
       <header className="Header">
-        <NumberDisplay displayNumber={bombCount} />
-        <button className="Face" onClick={handleFaceClick}><span role="img" aria-label="face">{face}</span></button>
+        <NumberDisplay displayNumber={bombCount()} />
+        <button className={`GamePhaseButton ${GamePhase[state.gamePhase]}`}
+          onClick={handleStatusClick}></button>
         <NumberDisplay displayNumber={time} />
       </header>
       <section className="Body">

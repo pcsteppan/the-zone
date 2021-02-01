@@ -1,5 +1,7 @@
 import React from "react";
 import { CellState, CellValue } from '../../types';
+import flagImg from '../../images/flag.png';
+import bombImg from '../../images/bomb.png';
 import './Button.scss';
 
 interface ButtonProps {
@@ -16,20 +18,22 @@ function Button({row, col, value, state, onClickHandler, onContextMenuHandler}: 
     switch(state) {
       case CellState.discovered:
         if(value === CellValue.bomb) {
-          return <span role="img" aria-label="bomb">💣</span>
+          return <img src={bombImg} alt="nuclear radiation symbol"/>
+          // return <span role="img" aria-label="bomb">💣</span>
         } else if (value < CellValue.bomb && value > CellValue.none){
           return <span className={CellValue[value].toString()}>{value}</span>
         }
         break;
       case CellState.flagged:
-        return <span role="img" aria-label="flag">🚩</span>
+        return <img src={flagImg} alt="nuclear radiation flag"/>
+        // return <span role="img" aria-label="flag">🚩</span>
       case CellState.undiscovered:
         break;
     }
   }
 
   return (
-    <div className={`Button ${state===CellState.discovered ? "discovered" : "undiscovered"}`}
+    <div className={`Button ${value===CellValue.bomb ? "bomb" : ""} ${state===CellState.discovered ? "discovered" : state===CellState.flagged ? "flagged" : "undiscovered"}`}
       onClick={onClickHandler(row, col)}
       onContextMenu={onContextMenuHandler(row, col)}>
       {renderContent()}

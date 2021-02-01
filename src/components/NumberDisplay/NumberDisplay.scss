@@ -1,10 +1,14 @@
+@import '../../styles/index.scss';
+
 .NumberDisplay {
   width: 80px;
-  font-size: 40px;
+  font-size: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 48px;
-  color: rgb(209, 184, 129);
-  background-color: #242c26;
+  color: rgb(253, 133, 53);
+  // font-family: 'Courier New', Courier, monospace;
+  font-family: 'Jet Brains Mono', monospace;
+  background-color: $border-dark;
 }

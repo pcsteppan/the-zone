@@ -1,6 +1,6 @@
 import { elementRoles } from 'aria-query';
 import {MAX_COLS, MAX_ROWS, BOMB_COUNT} from "../constants";
-import {CellValue, CellState, Cell, Index2D} from "../types";
+import {CellValue, CellState, Cell, Index2D, GamePhase} from "../types";
 
 export const generateNeighborIndices = (cellIndex: Index2D) : Index2D[] => {
   const neighborIndices : Index2D[] = [
@@ -68,6 +68,7 @@ export const bfsDiscover = (cells: Cell[][], i2D: Index2D): Cell[][] => {
   const visited : Set<number> = new Set<number>();
 
   frontier.push(i2D);
+  visited.add(i2D[0]*MAX_COLS + i2D[1]);
 
   while(frontier.length > 0){
     const currI2D = frontier.pop();
@@ -97,4 +98,31 @@ export const bfsDiscover = (cells: Cell[][], i2D: Index2D): Cell[][] => {
       }
     })
   })
+}
+
+export function getGamePhaseFromCells(cells: Cell[][]) : GamePhase {
+  let allNonBombsDiscovered = true; // -> playing : won
+  let anyCellDiscovered = false; // -> playing
+  let anyBombDiscovered = false; // -> lost
+
+  cells.forEach((row) => {
+    row.forEach((cell) => {
+      if(cell.value !== CellValue.bomb && cell.state !== CellState.discovered) {
+        allNonBombsDiscovered = false;
+      } else if (cell.state === CellState.discovered) {
+        anyCellDiscovered = true;
+        if(cell.value === CellValue.bomb) {
+          anyBombDiscovered = true;
+        }
+      }
+    })
+  })
+
+  if(anyBombDiscovered)
+    return GamePhase.lost;
+  if(allNonBombsDiscovered)
+    return GamePhase.won;
+  if(anyCellDiscovered)
+    return GamePhase.playing;
+  return GamePhase.apriori;
 }
