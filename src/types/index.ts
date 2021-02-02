@@ -50,6 +50,8 @@ export type Action =
   | { type: ActionType.FLAG; i2D: Index2D }
   | { type: ActionType.UNFLAG; i2D: Index2D  }
 
+export type GameRecord = {status: GamePhase, time: number}
+
 export type Cell = { value: CellValue, state: CellState }
 
 export type Index2D = [ row: number, col: number ]

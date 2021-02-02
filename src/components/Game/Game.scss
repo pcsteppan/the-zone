@@ -1,0 +1,56 @@
+@import '../../styles/index.scss';
+
+.Game{
+  background: $bg-tile repeat;
+  padding: 16px;
+  @include borders($border-light, $border-dark);
+  box-shadow:  20px 20px 35px #0f0f0f,
+             -20px -20px 35px #252525;
+}
+
+.Header {
+  background: $bg-tile repeat;
+  padding: 10px 12px;
+  @include borders($border-dark, $border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Body {
+  margin-top: 16px;
+  @include borders($border-dark, $border-light);
+  display: grid;
+  grid-template-rows: repeat(9, 1fr);
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.GamePhaseButton{
+  border-radius: 48%;
+  @include borders($border-light, $border-dark);
+  @include buttons;
+  background-color: $border-light;
+  width: 52px;
+  height: 52px;
+  font-size: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &.apriori{
+    @include gamePhaseBackgroundAndBorders($gray);
+  }
+
+  &.playing{
+    @include gamePhaseBackgroundAndBorders($orange);
+  }
+
+  &.won{
+    @include gamePhaseBackgroundAndBorders($blue);
+  }
+
+  &.lost{
+    @include gamePhaseBackgroundAndBorders($red);
+  }
+}
