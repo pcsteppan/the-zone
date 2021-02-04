@@ -18,7 +18,8 @@ function App() {
   return (
     <div className="App">
       <Game updateGameRecord={handleGameRecordChange} />
-      <article className="Panel">
+      {/* <article className="Panel">
+        <div className="InstructionsContainer">
         <h2>Instructions</h2>
         <button className="ShowInstructionsToggle" onClick={handleXClick}>{showInstructions ? "hide" : "show"}</button>
         { showInstructions && 
@@ -30,13 +31,16 @@ function App() {
             <li>After winning or losing, reset with the top button.</li>
           </ul>
         }
-        <h2 className="PersonalHighscoresHeader">Personal Highscores</h2>
-        <ul className="gameRecord">
-          {gameRecord.map(record => {
-            return <li>{GamePhase[record.status]} {record.time}</li>
-          })}
-        </ul>
-      </article>
+        </div>
+        <div className="PersonalHighscoreContainer">
+          <h2 className="PersonalHighscoresHeader">Personal Highscores</h2>
+          <ul className="gameRecord">
+            {gameRecord.map(record => {
+              return <li>{GamePhase[record.status]} {record.time}</li>
+            })}
+          </ul>
+        </div>
+      </article> */}
     </div>
   );
 }

@@ -1,28 +1,33 @@
 @import '../../styles/index.scss';
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,200;1,400&display=swap');
 
 .App{
   display: flex;
-  filter: contrast(1.4) hue-rotate(20deg);
-  font-family: 'Jet Brains Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
+  background: $bg;
 }
 
 .Panel{
   margin-left: 3em;
   padding: 1em;
-  border-top: 4px solid $border-light;
   width: 30em;
-  
-  background: $bg-panel repeat;
-  
-  color: $border-light;
   font-size: 14px;
-  
   
   h2{
     float: left;
+    color: inherit;
   }
 
   ul{
+    clear: both;
+  }
+
+  [class$="Container"] {
+    // @include borders(#111, $border-dark);
+  }
+
+  [class$="Container"]::after {
+    content: "\00a0";
     clear: both;
   }
 }
@@ -34,15 +39,7 @@
   padding: 0;
   margin-top: 4px;
   float: right;
-  color: $border-light;
+  color: inherit;
   background: none;
   font-style: bold;
-}
-
-.PersonalHighscoresHeader{
-  margin-top: 3em;
-  // border-top: 4px solid $border-light;
-  width: 100%;
-
-  clear: both;
 }

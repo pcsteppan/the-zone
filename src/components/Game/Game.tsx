@@ -73,6 +73,14 @@ function Game({updateGameRecord}: GameProps) {
   useEffect(() => {
     if(state.gamePhase === GamePhase.won || state.gamePhase === GamePhase.lost){
       updateGameRecord({status: state.gamePhase, time});
+      if(state.gamePhase === GamePhase.lost){
+        state.cells.map((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            if(cell.value==CellValue.bomb)
+              cellDispatch({type: ActionType.DISCOVER, i2D: [rowIndex, colIndex]})
+          });
+        })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.gamePhase])
@@ -145,6 +153,19 @@ function Game({updateGameRecord}: GameProps) {
     })
   }
 
+  const message = () => {
+    switch(state.gamePhase){
+      case GamePhase.apriori:
+        return "click any cell to begin"
+      case GamePhase.playing:
+        return "be careful"
+      case GamePhase.lost:
+        return "a terrible mistake..."
+      case GamePhase.won:
+        return "disaster averted, for now"
+    }
+  }
+
   return (
     <div className="Game">
       <header className="Header">
@@ -156,6 +177,11 @@ function Game({updateGameRecord}: GameProps) {
       <section className="Body">
         {renderCells()}
       </section>
+      <div className="MessageContainer">
+        <span></span>
+        <p className="Message">{message()}</p>
+        <span></span>
+      </div>
     </div>
   );
 }

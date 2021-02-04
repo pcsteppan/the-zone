@@ -1,17 +1,18 @@
 @import '../../styles/index.scss';
 
 .Game{
-  background: $bg-tile repeat;
+  background: $bg-borange repeat;
   padding: 16px;
-  @include borders($border-light, $border-dark);
+  padding-bottom: 10px;
+  @include borders($borange, $bg);
   box-shadow:  20px 20px 35px #0f0f0f,
-             -20px -20px 35px #252525;
+             -20px -20px 35px #24252b;
 }
 
 .Header {
-  background: $bg-tile repeat;
+  background: inherit;
   padding: 10px 12px;
-  @include borders($border-dark, $border-light);
+  @include borders($bg, $borange);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,17 +20,17 @@
 
 .Body {
   margin-top: 16px;
-  @include borders($border-dark, $border-light);
+  @include borders($bg, $borange);
   display: grid;
   grid-template-rows: repeat(9, 1fr);
   grid-template-columns: repeat(9, 1fr);
+  background: #111;
 }
 
 .GamePhaseButton{
   border-radius: 48%;
-  @include borders($border-light, $border-dark);
+  @include borders($borange, $bg);
   @include buttons;
-  background-color: $border-light;
   width: 52px;
   height: 52px;
   font-size: 35px;
@@ -37,20 +38,42 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  background-repeat: repeat;
+  
 
   &.apriori{
-    @include gamePhaseBackgroundAndBorders($gray);
+    background: $bg;
   }
 
   &.playing{
-    @include gamePhaseBackgroundAndBorders($orange);
+    background: $bg-status;
   }
 
   &.won{
-    @include gamePhaseBackgroundAndBorders($blue);
+    background: $bg-borange;
   }
 
   &.lost{
-    @include gamePhaseBackgroundAndBorders($red);
+    background: $bg;
   }
+}
+
+.MessageContainer{
+  width: 100%;
+  display: grid;
+  padding-top: .25em;
+  grid-template-columns: 1fr auto 1fr;
+
+  span {
+    border-top: 2px solid $bg;
+    height: 1px;
+    align-self: center;
+  }
+}
+
+.Message{
+  background-color: $borange;
+  padding: 0.025em 3px;
+  font-style: italic;
+  font-size: 13px;
 }

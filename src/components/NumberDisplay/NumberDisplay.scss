@@ -7,8 +7,9 @@
   align-items: center;
   justify-content: center;
   height: 48px;
-  color: rgb(253, 133, 53);
+  color: $borange;
   // font-family: 'Courier New', Courier, monospace;
-  font-family: 'Jet Brains Mono', monospace;
-  background-color: $border-dark;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  background-color: $bg;
 }

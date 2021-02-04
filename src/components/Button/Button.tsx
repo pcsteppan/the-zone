@@ -1,7 +1,7 @@
 import React from "react";
 import { CellState, CellValue } from '../../types';
 import flagImg from '../../images/flag.png';
-import bombImg from '../../images/bomb.png';
+import bombImg from '../../images/bomb.gif';
 import './Button.scss';
 
 interface ButtonProps {
@@ -26,7 +26,6 @@ function Button({row, col, value, state, onClickHandler, onContextMenuHandler}: 
         break;
       case CellState.flagged:
         return <img src={flagImg} alt="nuclear radiation flag"/>
-        // return <span role="img" aria-label="flag">🚩</span>
       case CellState.undiscovered:
         break;
     }
