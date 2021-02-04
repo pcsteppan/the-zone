@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/the-zone/static/css/main.de5739ec.chunk.css",
-    "main.js": "/the-zone/static/js/main.710f0885.chunk.js",
-    "main.js.map": "/the-zone/static/js/main.710f0885.chunk.js.map",
+    "main.css": "/the-zone/static/css/main.7b4ea905.chunk.css",
+    "main.js": "/the-zone/static/js/main.67a6b109.chunk.js",
+    "main.js.map": "/the-zone/static/js/main.67a6b109.chunk.js.map",
     "runtime-main.js": "/the-zone/static/js/runtime-main.14fe5393.js",
     "runtime-main.js.map": "/the-zone/static/js/runtime-main.14fe5393.js.map",
-    "static/js/2.f94a9dbc.chunk.js": "/the-zone/static/js/2.f94a9dbc.chunk.js",
-    "static/js/2.f94a9dbc.chunk.js.map": "/the-zone/static/js/2.f94a9dbc.chunk.js.map",
+    "static/js/2.8594222b.chunk.js": "/the-zone/static/js/2.8594222b.chunk.js",
+    "static/js/2.8594222b.chunk.js.map": "/the-zone/static/js/2.8594222b.chunk.js.map",
     "index.html": "/the-zone/index.html",
-    "static/css/main.de5739ec.chunk.css.map": "/the-zone/static/css/main.de5739ec.chunk.css.map",
-    "static/js/2.f94a9dbc.chunk.js.LICENSE.txt": "/the-zone/static/js/2.f94a9dbc.chunk.js.LICENSE.txt"
+    "static/css/main.7b4ea905.chunk.css.map": "/the-zone/static/css/main.7b4ea905.chunk.css.map",
+    "static/js/2.8594222b.chunk.js.LICENSE.txt": "/the-zone/static/js/2.8594222b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.14fe5393.js",
-    "static/js/2.f94a9dbc.chunk.js",
-    "static/css/main.de5739ec.chunk.css",
-    "static/js/main.710f0885.chunk.js"
+    "static/js/2.8594222b.chunk.js",
+    "static/css/main.7b4ea905.chunk.css",
+    "static/js/main.67a6b109.chunk.js"
   ]
 }
